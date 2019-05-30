@@ -1,7 +1,8 @@
 const { gql } = require('apollo-server-express');
 
 const UserTypeDef = gql`
-    type User {
+    type User implements Node {
+        id: ID!
         username: String!
         email: String!
         account: Account
@@ -9,7 +10,7 @@ const UserTypeDef = gql`
     }
 
     extend type Query {
-        singleUser(id: Int!): User
+        singleUser(id: ID!): Node
     }
 `;
 

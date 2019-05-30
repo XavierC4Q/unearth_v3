@@ -24,14 +24,15 @@ const AuthResolvers = {
 							email: findUser.email,
 							joined: findUser.joined,
 							account: findUser.account,
+							id: findUser._id
 						},
 						'MARKBEAU',
 						{ expiresIn: '12h' },
 					);
-					return { user: findUser, token, message: 'Login success!' };
+					return { id: findUser._id, user: findUser, token, message: 'Login success!' };
 				}
 				else {
-					return { user: null, token: '', message: 'WRONG PASSWORD/EMAIL' };
+					return { id: '0', user: null, token: '', message: 'WRONG PASSWORD/EMAIL' };
 				}
 			} catch (error) {
 				return null;
@@ -48,14 +49,15 @@ const AuthResolvers = {
 						email: newUser.email,
 						joined: newUser.joined,
 						account: newUser.account,
+						id: newUser._id
 					},
 					'MARKBEAU',
 					{ expiresIn: '12h' },
 				);
 
-				return { user: newUser, token, message: 'Register success!' };
+				return { id: newUser._id, user: newUser, token, message: 'Register success!' };
 			} catch (error) {
-				return { user: null, token: '', message: 'Failed to register' };
+				return { id: '0', user: null, token: '', message: 'Failed to register' };
 			}
 		},
 	},

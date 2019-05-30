@@ -1,19 +1,20 @@
 const { gql } = require('apollo-server-express');
 
 const AuthTypeDefs = gql`
-    type Auth {
+    type Auth implements Node {
+        id: ID!
         user: User!
         token: String!
         message: String
     }
 
     extend type Query {
-        isAuthenticated: User
+        isAuthenticated: Node
     }
 
     extend type Mutation {
-        login(email: String!, password: String!): Auth
-        register(username: String!, password: String!, email: String!): Auth
+        login(email: String!, password: String!): Node
+        register(username: String!, password: String!, email: String!): Node
     }
 `;
 

@@ -3,6 +3,11 @@ const AuthTypeDefs = require('./auth');
 const UserTypeDefs = require('./user');
 
 const RootTypeDefs = gql`
+
+	interface Node {
+		id: ID!
+	}
+
 	enum Account {
 		GUEST
 		ADMIN

@@ -2,7 +2,6 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const schema = require('./apollo/schema');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
@@ -19,40 +18,31 @@ mongoose
 	});
 
 app.use(cors());
-app.use(bodyParser.json());
-app.use(
-	bodyParser.urlencoded({
-		extended: false,
-	}),
-);
 app.use(logger('dev'));
 
-app.use('/graphql', function(req, res, next) {
+app.use(function(req, res, next) {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Headers', 'Content-Type');
+	res.header('Content-Type', 'application/json');
+	next();
+});
+
+const verifyJWT = async (req) => {
 	const token = req.headers.authorization || '';
 	if (token) {
-		try {
-			const decoded = jwt.verify(token, 'MARKBEAU');
-			const decode = decoded._doc;
-			req.user = {
-				username: decode.username,
-				email: decode.email,
-				account: decode.account,
-				joined: decode.joined,
-			};
-			next();
-		} catch (err) {
-			res.status(304).json({ error: 'Error verifying token' });
-		}
-	} else {
-		next();
+		const user = jwt.verify(token, 'MARKBEAU');
+		req.user = { ...user };
+		return { user: req.user };
 	}
-});
+
+	return {
+		user: null,
+	};
+};
 
 const apolloServer = new ApolloServer({
 	schema,
-	context: ({ req }) => ({
-		user: req.user,
-	}),
+	context: ({ req }) => verifyJWT(req),
 });
 
 apolloServer.applyMiddleware({ app });
