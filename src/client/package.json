@@ -9,23 +9,26 @@
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.6.0",
+    "apollo-client": "^2.6.0",
+    "apollo-link": "^1.2.11",
+    "apollo-link-http": "^1.5.14",
+    "apollo-link-state": "^0.4.2",
     "core-js": "^2.6.5",
+    "graphql": "^14.3.1",
+    "graphql-tag": "^2.10.1",
+    "lodash": "^4.17.11",
     "vue": "^2.6.10",
-    "vue-apollo": "^3.0.0-beta.11",
+    "vue-apollo": "^3.0.0-beta.30",
     "vue-router": "^3.0.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.8.0",
     "@vue/cli-plugin-eslint": "^3.8.0",
     "@vue/cli-service": "^3.8.0",
-    "@vue/eslint-config-prettier": "^4.0.1",
+    "@vue/eslint-config-airbnb": "^4.0.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
-    "graphql-tag": "^2.9.0",
-    "node-sass": "^4.9.0",
-    "sass-loader": "^7.1.0",
-    "vue-cli-plugin-apollo": "^0.20.0",
     "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {
@@ -34,15 +37,16 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/essential"
+      "plugin:vue/essential",
+      "@vue/airbnb"
     ],
     "rules": {
-      "quotes": [
-        2,
-        "single"
-      ],
-      "tabs": true,
-      "tabWidth": 4
+      "array-bracket-spacing": 0,
+      "no-tabs": 0,
+      "indent": [
+        "error",
+        "tab"
+      ]
     },
     "parserOptions": {
       "parser": "babel-eslint"

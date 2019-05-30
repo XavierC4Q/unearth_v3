@@ -1,83 +1,94 @@
 <template>
-  <div v-if="formType === 'Login'">
-    <h2>Login Form</h2>
-    <ApolloMutation
-      :mutation="require('@/graphql/auth/login.gql')"
-      :variables="{ email, password }"
-      @done="handleSubmit"
-      @error="handleError"
-    >
-      <template v-slot="{ mutate, loading, error }">
-        <form @submit.prevent="mutate()">
-          <FormInput name="email" :value="email" label="Enter Your Email" :handleInput="input"/>
-          <FormInput
-            name="password"
-            :value="password"
-            label="Enter Your Password"
-            :handleInput="input"
-          />
-          <button :disabled="loading" type="submit">Submit</button>
-        </form>
-      </template>
-    </ApolloMutation>
-  </div>
-  <div v-else>
-    <h2>Register Form</h2>
-    <ApolloMutation
-      :mutation="require('@/graphql/auth/register.gql')"
-      :variables="{ email, password, username }"
-      @done="handleSubmit"
-    >
-      <template v-slot="{ mutate, loading, error }">
-        <form @submit.prevent="mutate()">
-          <FormInput
-            name="username"
-            :value="username"
-            label="Enter Your Username"
-            :handleInput="input"
-          />
-          <FormInput name="email" :value="email" label="Enter Your Email" :handleInput="input"/>
-          <FormInput
-            name="password"
-            :value="password"
-            label="Enter Your Password"
-            :handleInput="input"
-          />
-          <button :disabled="loading" type="submit">Submit</button>
-        </form>
-      </template>
-    </ApolloMutation>
+  <div>
+    <h1>{{ formType }} Form</h1>
+    <div v-if="formType === 'Login'">
+      <form @submit.prevent="onSubmit">
+        <FormInput v-model="email" label="Enter Your Email" placeholder="example@gmail.com"/>
+        <FormInput v-model="password" label="Enter Your Password" placeholder="abcdefgh"/>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+    <div v-else>
+      <form @submit.prevent="onSubmit">
+        <FormInput v-model="username" label="Enter Your Username" placeholder="MacCheesus"/>
+        <FormInput v-model="email" label="Enter Your Email" placeholder="example@gmail.com"/>
+        <FormInput v-model="password" label="Enter Your Password" placeholder="abcdefgh"/>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
-import FormInput from "@/components/FormInput";
+import FormInput from "@/components/FormInput.vue";
+import gql from "graphql-tag";
+
+import { login, register } from "@/graphql/mutations/auth.js";
 
 export default {
   name: "AuthForm",
-  components: {
-    FormInput
-  },
   props: {
     formType: String
   },
   data() {
     return {
       username: "",
-      password: "",
       email: "",
-      input: this.handleInput
+      password: "",
+      message: "",
+      currentUser: null
     };
   },
+  components: {
+    FormInput
+  },
+  apollo: {
+    currentUser: {
+      query: gql`
+        query currentUser {
+          currentUser @client {
+            user {
+              username
+              email
+              account
+              joined,
+              id
+            }
+          }
+        }
+      `
+    }
+  },
+  computed: {
+    authMutation() {
+      if (this.formType === "Login") return login;
+      return register;
+    },
+    authVariables() {
+      if (this.formType === "Login") {
+        return {
+          email: this.email,
+          password: this.password
+        };
+      }
+      return {
+        username: this.username,
+        email: this.email,
+        password: this.password
+      };
+    }
+  },
   methods: {
-    handleSubmit: function({ data }) {
-      console.log("DATA", data);
-    },
-    handleInput: function(key, val) {
-      this[key] = val;
-    },
-    handleError: function(errors) {
-      console.log('ERRSS', errors);
+    async onSubmit() {
+      try {
+        const authenticateUser = await this.$apollo.mutate({
+          mutation: this.authMutation,
+          variables: this.authVariables
+        });
+        console.log("USER", authenticateUser);
+      } catch (error) {
+        console.log("APOLLO ERROR", error);
+      }
     }
   }
 };
@@ -85,3 +96,4 @@ export default {
 
 <style scoped>
 </style>
+

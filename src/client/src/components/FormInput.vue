@@ -4,33 +4,28 @@
       <label>{{ label }}</label>
     </div>
     <div>
-      <input type="text" :value="value" @input="doInput">
+      <input
+        :value="value"
+        @input="$emit('input', $event.target.value)"
+        :placeholder="placeholder"
+      >
     </div>
   </section>
 </template>
+
 
 <script>
 export default {
   name: "FormInput",
   inheritAttrs: false,
-  props: ["label", "name"],
+  props: ["label", "placeholder"],
   computed: {
-      value: function() {
-          const { value } = this.$attrs;
-          return value;
-      },
-      handleInput: function() {
-          const { handleInput } = this.$attrs;
-          return handleInput;
-      }
-  },
-  methods: {
-      doInput: function(e) {
-          this.handleInput(this.name, e.target.value)
-      }
-  },
+    value() {
+      return this.$attrs["value"];
+    }
+  }
 };
 </script>
 
-<style>
+<style scoped>
 </style>

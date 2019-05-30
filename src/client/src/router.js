@@ -11,7 +11,7 @@ export default new Router({
 	routes: [
 		{
 			path: '/',
-			name: 'Home',
+			name: 'home',
 			component: Home,
 		},
 		{
@@ -26,13 +26,13 @@ export default new Router({
 			path: '/login',
 			name: 'Login',
 			component: AuthForm,
-			props: { formType: 'Login' }
+			props: { formType: 'Login' },
 		},
 		{
 			path: '/register',
 			name: 'Register',
 			component: AuthForm,
-			props: { formType: 'Register' }
+			props: { formType: 'Register' },
 		},
 	],
 });
