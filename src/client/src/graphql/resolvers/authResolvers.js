@@ -1,6 +1,7 @@
 export default {
 	Mutation: {
 		setCurrentUser(_, { user, token }, { cache }) {
+			console.log('THE RESOLVER?', user, token);
 			if (token && user) {
 				localStorage.setItem('auth-token', token);
 

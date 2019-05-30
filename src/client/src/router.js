@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
 import AuthForm from './views/AuthForm.vue';
+import ProfilePage from './views/ProfilePage.vue';
 
 Vue.use(Router);
 
@@ -33,6 +34,11 @@ export default new Router({
 			name: 'Register',
 			component: AuthForm,
 			props: { formType: 'Register' },
+		},
+		{
+			path: '/user/:id',
+			name: 'ProfilePage',
+			component: ProfilePage,
 		},
 	],
 });

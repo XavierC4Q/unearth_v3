@@ -35,3 +35,9 @@ export const register = gql`
         }
     }
 `;
+
+export const setCurrentUser = gql`
+    mutation setCurrentUser($user: User!, $token: String!) {
+        setCurrentUser(user: $user, token: $token) @client
+    }
+`;
